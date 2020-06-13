@@ -1,0 +1,371 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <script>
+      
+    </script>
+    <script type="text/javascript">
+        //const URLAPP = 'https://devweb2020aula03.herokuapp.com';
+        const URLAPP = 'localhost:8802/query1';
+        var vApp;
+        function createVueApp() {
+            vApp = new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        alunos: [],
+                        projeto: 'DEVWEB - V1.00'
+                    }
+                },
+                methods: {
+                    getAlunos: function () {
+                        axios.get(URLAPP + '/alunos')
+                          .then(function (response) {
+                              // handle success
+                              console.log(response);
+                              if (response.status == 200) {
+                                  vApp.alunos = response.data;
+                                  document.getElementById("resultado").innerText = vApp.alunos.length + " aluno(s)";
+                                  document.getElementById("resultado").style.display = "block";
+                              }
+                          })
+                          .catch(function (error) {
+                              // handle error
+                              if (error.response) {
+                                  // The request was made and the server responded with a status code
+                                  // that falls out of the range of 2xx
+                                  console.log(error.response.data);
+                                  console.log(error.response.status);
+                              } else if (error.request) {
+                                  // The request was made but no response was received
+                                  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                  // http.ClientRequest in node.js
+                                  console.log(error.request);
+                              } else {
+                                  // Something happened in setting up the request that triggered an Error
+                                  console.log('Error', error.message);
+                              }
+                          });
+                    },
+                    getAlunosRa: function (ra) {
+                        axios.get(URLAPP + '/alunos/' + ra)
+                         .then(function (response) {
+                             // handle success
+                             console.log(response);
+                             if (response.status == 200) {
+                                 vApp.alunos = [];
+                                 vApp.alunos.push(response.data);
+                                 document.getElementById("resultado").style.display = "none";
+                             } else
+                                 if (response.status == 204) {
+                                     document.getElementById("resultado").innerText = "RA não existe";
+                                     document.getElementById("resultado").style.display = "block";
+                                 }
+
+                         })
+                         .catch(function (error) {
+                             // handle error
+                             if (error.response) {
+                                 // The request was made and the server responded with a status code
+                                 // that falls out of the range of 2xx
+                                 console.log(error.response.data);
+                                 console.log(error.response.status);
+                             } else if (error.request) {
+                                 // The request was made but no response was received
+                                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                 // http.ClientRequest in node.js
+                                 console.log(error.request);
+                             } else {
+                                 // Something happened in setting up the request that triggered an Error
+                                 console.log('Error', error.message);
+                             }
+                         });
+                    },
+                    postAlunos(aluno) {
+                        // Make a request for a user with a given ID
+                        axios.post(URLAPP + '/alunos', aluno)
+                          .then(function (response) {
+                              // handle success
+                              console.log(response);
+                              if (response.status == 201) {
+                                  document.getElementById("resultado").innerText = "Aluno Cadastrado";
+                                  document.getElementById("resultado").style.display = "block";
+                              }
+                          })
+                          .catch(function (error) {
+                              // handle error
+                              if (error.response) {
+                                  // The request was made and the server responded with a status code
+                                  // that falls out of the range of 2xx
+                                  if (error.response.status == 409) {
+                                      document.getElementById("resultado").innerText = "Aluno já existe no cadastro";
+                                      document.getElementById("resultado").style.display = "block";
+                                  }
+                                  console.log(error.response.data);
+                                  console.log(error.response.status);
+                              } else if (error.request) {
+                                  // The request was made but no response was received
+                                  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                  // http.ClientRequest in node.js
+                                  console.log(error.request);
+                              } else {
+                                  // Something happened in setting up the request that triggered an Error
+                                  console.log('Error', error.message);
+                              }
+                          });
+                    },
+                    putAlunos(aluno) {
+                        // Make a request for a user with a given ID
+                        axios.put(URLAPP + '/alunos/' + aluno.ra, aluno)
+                          .then(function (response) {
+                              // handle success
+                              console.log(response);
+                              if (response.status == 200) {
+                                  vApp.getAlunos();
+                              }
+                          })
+                          .catch(function (error) {
+                              // handle error
+                              if (error.response) {
+                                  // The request was made and the server responded with a status code
+                                  // that falls out of the range of 2xx
+                                  if (error.response.status == 409)
+                                      document.getElementById("resPost").innerHTML = "Aluno já existe. Duplicidade!!!";
+                                  console.log(error.response.data);
+                                  console.log(error.response.status);
+                              } else if (error.request) {
+                                  // The request was made but no response was received
+                                  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                  // http.ClientRequest in node.js
+                                  console.log(error.request);
+                              } else {
+                                  // Something happened in setting up the request that triggered an Error
+                                  console.log('Error', error.message);
+                              }
+                          });
+                    },
+                    deleteAlunosRa(ra) {
+                        axios.delete(URLAPP + '/alunos/' + ra)
+                          .then(function (response) {
+                              // handle success
+                              console.log(response);
+                              if (response.status == 200) {
+                                  vApp.getAlunos();
+                                  //document.getElementById("resPost").innerHTML = "<br/>Aluno eliminado";
+                              } else
+                                  if (response.status == 204) {
+                                     
+                                      //document.getElementById("resPost").innerHTML = "<br/>Aluno não cadastrado";
+                                  } else {
+                                      //document.getElementById("resPost").innerHTML = "Problema no sistema. Tente mais tarde ou contate o administrador";
+                                  }
+                          })
+                          .catch(function (error) {
+                              // handle error
+                              if (error.response) {
+                                  // The request was made and the server responded with a status code
+                                  // that falls out of the range of 2xx
+                                  console.log(error.response.data, "<-response");
+                                  console.log(error.response.status);
+
+                              } else if (error.request) {
+                                  // The request was made but no response was received
+                                  // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                  // http.ClientRequest in node.js
+                                  console.log(error.request, "<-request");
+                                  if (status == 204) {
+                                      document.getElementById("resPost").innerHTML = "Aluno não cadastrado";
+                                  } else {
+                                      document.getElementById("resPost").innerHTML = "Problema no sistema. Tente mais tarde ou contate o administrador";
+                                  }
+                              } else {
+                                  // Something happened in setting up the request that triggered an Error
+                                  console.log('Error', error.message, "<-error");
+                              }
+                          })
+                    }
+                },
+            });
+        }
+
+        function novoAluno() {
+            $('#novoAluno').modal('show');
+        }
+
+        function salvarAluno() {
+            $('#novoAluno').modal('hide');
+            // consiste form
+
+            // novo aluno
+            let aluno = {};
+            aluno.ra = document.getElementById("txtRa").value;
+            aluno.nome = document.getElementById("txtNome").value;
+            aluno.email = document.getElementById("txtEmail").value;
+
+            vApp.postAlunos(aluno);
+        }
+
+        function eliminarAluno(obj) {
+            var i = parseInt(obj.dataset.objectIndex);
+            var aluno = vApp.alunos[i];
+            console.log(aluno);
+            vApp.deleteAlunosRa(aluno.ra);
+        }
+
+        function editarAluno(obj) {
+            var i = parseInt(obj.dataset.objectIndex);
+            var aluno = vApp.alunos[i];
+            console.log(aluno);
+
+            // mover lista (aluno selecionado) -> Form (modal)
+            // Apresentar a modal
+            // Clique da modal - obter nome e e-mail
+            // chamar o put da API
+            document.getElementById("txtRaE").value = aluno.ra;
+            document.getElementById("txtNomeE").value = aluno.nome;
+            document.getElementById("txtEmailE").value = aluno.email;
+            $('#editarAluno').modal('show');
+        }
+
+        function editarAlunoConfirmar(obj) {
+            let aluno = {};
+            aluno.ra = document.getElementById("txtRaE").value;
+            aluno.nome = document.getElementById("txtNomeE").value;
+            aluno.email = document.getElementById("txtEmailE").value;
+            vApp.putAlunos(aluno);
+            $('#editarAluno').modal('hide');
+        }
+
+        function buscarAluno(obj) {
+            const ra = document.getElementById("txtRaBusca").value;
+            vApp.getAlunosRa(ra);
+
+        }
+
+
+    </script>
+
+    <title>WEBDEV - Template</title>
+</head>
+<body onload="createVueApp();">
+    <div id="app" class="container">
+        <h1>Cadastro de Alunos</h1>
+        <button type="button" class="btn btn-primary" onclick="vApp.getAlunos();">Listar Aluno</button>
+        <button type="button" class="btn btn-primary" onclick="novoAluno();">Novo Aluno</button>
+        <input id="txtRaBusca" type="number" min="0" />  <button type="button" class="btn btn-primary" onclick="buscarAluno(this);">Buscar RA</button>
+        <hr />
+        <p id="resultado" class="alert alert-warning" role="alert" style="display: none;"></p>
+        <div class="row">
+            <div class="col-sm">
+                Ação
+            </div>
+            <div class="col-sm">
+                RA
+            </div>
+            <div class="col-sm">
+                Nome
+            </div>
+            <div class="col-sm">
+                email
+            </div>
+        </div>
+
+        <div v-for="(aluno, index) in alunos" class="row" style="margin-bottom:4px;">
+            <div class="col-sm">
+                <button type="button" class="btn btn-danger" v-bind:data-object-index="index" onclick="eliminarAluno(this);">Eliminar</button>
+                <button type="button" class="btn btn-success" v-bind:data-object-index="index" onclick="editarAluno(this);">Editar</button>
+            </div>
+            <div class="col-sm">
+                {{aluno.ra}}
+            </div>
+            <div class="col-sm">
+               {{aluno.nome}}
+            </div>
+            <div class="col-sm">
+                {{aluno.email}}
+            </div>
+        </div>
+
+        <!-- modal NOVO ALUNO -->
+        <div id="novoAluno" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Novo Aluno</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="txtRa">RA</label>
+                            <input type="text" class="form-control" id="txtRa" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtNome">Nome</label>
+                            <input type="text" class="form-control" id="txtNome" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtEmail">Email</label>
+                            <input type="email" class="form-control" id="txtEmail" />
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="salvarAluno();">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+         <!-- modal EDITAR ALUNO -->
+        <div id="editarAluno" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Alterar Aluno</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="txtRa">RA</label>
+                            <input type="text" class="form-control" id="txtRaE" readonly="readonly" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtNome">Nome</label>
+                            <input type="text" class="form-control" id="txtNomeE" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtEmail">Email</label>
+                            <input type="email" class="form-control" id="txtEmailE" />
+                        </div>
+                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" onclick="editarAlunoConfirmar();">Alterar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</body>
+</html>
