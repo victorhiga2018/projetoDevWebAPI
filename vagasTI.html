@@ -1,0 +1,633 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <script>
+    </script>
+    <script type="text/javascript">
+        const URLAPP = 'https://vagasti.herokuapp.com';
+        //const URLAPP = 'http://localhost:8802';
+        var vApp;
+
+        function createVueApp() {
+            vApp = new Vue({
+                el: '#app',
+                data() {
+                    return {
+                        vagasTI: [],
+                        projeto: 'DEVWEB - V1.00'
+                    }
+                },
+                methods: {
+
+                    //LISTA TODOS AS VAGAS
+                    getVagasTI: function() {
+                        axios.get(URLAPP + '/vagasTI')
+
+                        .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.vagasTI = response.data;
+                                    document.getElementById("resultado").innerText = vApp.vagasTI.length + " vaga(s)";
+                                    document.getElementById("resultado").style.display = "block";
+                                }
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+                    //LISTA A VAGA COM DETERMINADO ID
+                    getVagasID: function(id) {
+                        axios.get(URLAPP + '/vagasTI/' + id)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.vagasTI = [];
+                                    vApp.vagasTI.push(response.data);
+                                    document.getElementById("resultado").style.display = "none";
+                                } else
+                                if (response.status == 204) {
+                                    document.getElementById("resultado").innerText = "ID não existe";
+                                    document.getElementById("resultado").style.display = "block";
+                                }
+
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+
+                    //LISTANDO VAGA COM DETERMINADO CARGO
+                     getVagasCargo: function(cargo) {
+                        console.log(cargo)
+                        axios.get(URLAPP + '/vagasTI/busca?cargo=' + cargo)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.vagasTI = response.data;
+                                    
+                                    document.getElementById("resultado").style.display = "none";
+                                } else
+                                if (response.status == 204) {
+                                    vApp.vagasTI = [];
+                                    document.getElementById("resultado").innerText = "Cargo não existe";
+                                    document.getElementById("resultado").style.display = "block";
+                                }
+
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+
+                    //LISTANDO VAGA COM DETERMINADO REQUISITO
+                    getVagasRequisitos: function(requisitos) {
+                        console.log(requisitos)
+                        axios.get(URLAPP + '/vagasTI/busca-requisitos?requisitos=' + requisitos)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.vagasTI = response.data;
+                                    
+                                    document.getElementById("resultado").style.display = "none";
+                                } else
+                                if (response.status == 204) {
+                                    vApp.vagasTI = [];
+                                    document.getElementById("resultado").innerText = "Requisito não existe";
+                                    document.getElementById("resultado").style.display = "block";
+                                }
+
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+
+                     //LISTANDO VAGA COM DETERMINADO SALARIO
+                     getVagasSalario: function(salario) {
+                        console.log(salario)
+                        axios.get(URLAPP + '/vagasTI/busca-salario?salario=' + salario)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.vagasTI = response.data;
+                                    
+                                    document.getElementById("resultado").style.display = "none";
+                                } else
+                                if (response.status == 204) {
+                                    vApp.vagasTI = [];
+                                    document.getElementById("resultado").innerText = "Salario não existe";
+                                    document.getElementById("resultado").style.display = "block";
+                                }
+
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+
+
+                     //LISTANDO VAGA COM DETERMINADO CARGO OU REQUISITO
+                     getVagasCargoRequisitos: function(arg) {
+                        console.log(arg)
+                        axios.get(URLAPP + '/vagasTI/busca-dupla?arg=' + arg)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.vagasTI = response.data;
+                                    
+                                    document.getElementById("resultado").style.display = "none";
+                                } else
+                                if (response.status == 204) {
+                                    vApp.vagasTI = [];
+                                    document.getElementById("resultado").innerText = "Cargo ou Requisito não existe";
+                                    document.getElementById("resultado").style.display = "block";
+                                }
+
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+
+                    //INSERINDO UMA VAGA
+                    postVagasTI(vagasTI) {
+                        // Make a request for a user with a given ID
+                        axios.post(URLAPP + '/vagasTI', vagasTI)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 201) {
+                                    document.getElementById("resultado").innerText = "Vaga Cadastrada";
+                                    document.getElementById("resultado").style.display = "block";
+                                }
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    if (error.response.status == 409) {
+                                        document.getElementById("resultado").innerText = "Aluno já existe no cadastro";
+                                        document.getElementById("resultado").style.display = "block";
+                                    }
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+                    //ATUALIZANDO UMA VAGA
+                    putVagasTI(vagaTI) {
+                        // Make a request for a user with a given ID
+                        axios.put(URLAPP + '/vagasTI/' + vagaTI.id, vagaTI)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.getVagasTI();
+                                }
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    if (error.response.status == 409)
+                                        document.getElementById("resPost").innerHTML = "Vaga já existe. Duplicidade!!!";
+                                    console.log(error.response.data);
+                                    console.log(error.response.status);
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request);
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message);
+                                }
+                            });
+                    },
+                    //DELETA UMA VAGA COM DETERMINADO ID
+                    deleteVagasID(id) {
+                        axios.delete(URLAPP + '/vagasTI/' + id)
+                            .then(function(response) {
+                                // handle success
+                                console.log(response);
+                                if (response.status == 200) {
+                                    vApp.getVagasTI();
+                                    //document.getElementById("resPost").innerHTML = "<br/>Aluno eliminado";
+                                } else
+                                if (response.status == 204) {
+
+                                    //document.getElementById("resPost").innerHTML = "<br/>Aluno não cadastrado";
+                                } else {
+                                    //document.getElementById("resPost").innerHTML = "Problema no sistema. Tente mais tarde ou contate o administrador";
+                                }
+                            })
+                            .catch(function(error) {
+                                // handle error
+                                if (error.response) {
+                                    // The request was made and the server responded with a status code
+                                    // that falls out of the range of 2xx
+                                    console.log(error.response.data, "<-response");
+                                    console.log(error.response.status);
+
+                                } else if (error.request) {
+                                    // The request was made but no response was received
+                                    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+                                    // http.ClientRequest in node.js
+                                    console.log(error.request, "<-request");
+                                    if (status == 204) {
+                                        document.getElementById("resPost").innerHTML = "Vaga não cadastrada";
+                                    } else {
+                                        document.getElementById("resPost").innerHTML = "Problema no sistema. Tente mais tarde ou contate o administrador";
+                                    }
+                                } else {
+                                    // Something happened in setting up the request that triggered an Error
+                                    console.log('Error', error.message, "<-error");
+                                }
+                            })
+                    }
+                },
+            });
+        }
+
+        function novaVagaTI() {
+            $('#novaVagaTI').modal('show');
+        }
+
+        function salvarVagaTI() {
+            $('#novoVagaTI').modal('hide');
+            // consiste form
+
+            // nova vaga
+            let vagaTI = {};
+            vagaTI.id = document.getElementById("txtId").value;
+            vagaTI.cargo = document.getElementById("txtCargo").value;
+            vagaTI.requisitos = document.getElementById("txtRequisitos").value;
+            vagaTI.salario = document.getElementById("txtSalario").value;
+            
+            
+            vApp.postVagasTI(vagaTI);
+            $('#novaVagaTI').modal('hide');
+            
+        }
+
+        function eliminarVagaTI(obj) {
+            var i = parseInt(obj.dataset.objectIndex);
+            var vagaTI = vApp.vagasTI[i];
+            console.log(vagaTI);
+            vApp.deleteVagasID(vagaTI.id);
+        }
+
+        function editarVagaTI(obj) {
+            var i = parseInt(obj.dataset.objectIndex);
+            var vagaTI = vApp.vagasTI[i];
+            console.log(vagaTI);
+
+            // mover lista (aluno selecionado) -> Form (modal)
+            // Apresentar a modal
+            // Clique da modal - obter nome e e-mail
+            // chamar o put da API
+            document.getElementById("txtIdE").value = vagaTI.id;
+            document.getElementById("txtCargoE").value = vagaTI.cargo;
+            document.getElementById("txtRequisitosE").value = vagaTI.requisitos;
+            document.getElementById("txtSalarioE").value = vagaTI.salario;
+            $('#editarVagaTI').modal('show');
+        }
+
+        function editarVagaTIConfirmar(obj) {
+            let vagaTI = {};
+            vagaTI.id = document.getElementById("txtIdE").value;
+            vagaTI.cargo = document.getElementById("txtCargoE").value;
+            vagaTI.requisitos = document.getElementById("txtRequisitosE").value;
+            vagaTI.salario = document.getElementById("txtSalarioE").value;
+            vApp.putVagasTI(vagaTI);
+            $('#editarVagaTI').modal('hide');
+        }
+
+        function buscarVagaTI(obj) {
+            const id = document.getElementById("txtIdBusca").value;
+            vApp.getVagasID(id);
+        }
+
+        function buscarVagaTICargo(obj) {
+            const cargo = document.getElementById("txtIdBusca").value;
+            vApp.getVagasCargo(cargo);
+        }
+
+        function buscarVagaTIRequisitos(obj) {
+            const requisitos = document.getElementById("txtIdBusca").value;
+            vApp.getVagasRequisitos(requisitos);
+        }
+
+        function buscarVagaTISalario(obj) {
+            const salario = document.getElementById("txtIdBusca").value;
+            vApp.getVagasSalario(salario);
+        }
+
+        function buscarVagaTICargoRequisitos(obj) {
+            const arg = document.getElementById("txtIdBusca").value;
+            vApp.getVagasCargoRequisitos(arg);
+        }
+
+    </script>
+
+    <title>WEBDEV - Template</title>
+</head>
+
+
+
+<div class="p-3 mb-2 bg-dark text-info">
+
+    <h1>
+        <p class="text-center" style="font-family: Verdana, Geneva, Tahoma, sans-serif;" class="text-monospace">Cadastro de vagas de TI</p>
+
+
+    </h1>
+
+
+    <center><div class="bg-dark clearfix">
+        <button type="button" class="btn btn-outline-info" onclick="vApp.getVagasTI();">Listar Vagas de TI</button>
+        <button type="button" class="btn btn-outline-info" onclick="novaVagaTI();">Nova Vaga</button>
+
+
+        <button class="btn btn-outline-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Filtrar Busca
+          </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <img src="procurar.png" style="width: 35px; height: 40px; margin-left: 8px;">
+            <input id="txtIdBusca"  type="text"  />
+            <a class="dropdown-item" href="#" onclick="buscarVagaTI(this);">Buscar ID</a>
+            <a class="dropdown-item" href="#" onclick="buscarVagaTICargo(this);">Buscar Cargo</a>
+            <a class="dropdown-item" href="#" onclick="buscarVagaTIRequisitos(this);">Buscar Requisitos</a>
+            <a class="dropdown-item" href="#" onclick="buscarVagaTISalario(this);">Buscar Salario</a>
+            <a class="dropdown-item" href="#" onclick="buscarVagaTICargoRequisitos(this);">Buscar Cargo ou Requisito</a>
+
+
+
+        </div>
+
+    </div>
+    </center>
+</div>
+
+
+
+
+<body onload="createVueApp();">
+
+    <style rel="stylesheet">
+        body {
+            background-image: url("imagens/background.jpg");
+            no-repeat center top fixed;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+    <div id="app" class="container">
+
+
+        <hr />
+        <div class="p-3 mb-2 bg-dark text-info">
+            <p id="resultado" class="alert alert-warning" role="alert" style="display: none;"></p>
+            <div class="row">
+                <div class="col-sm">
+                    Ação
+                </div>
+                <div class="col-sm">
+                    ID
+                </div>
+                <div class="col-sm">
+                    cargo
+                </div>
+                <div class="col-sm">
+                    requisitos
+                </div>
+                <div class="col-sm">
+
+                    salario
+                </div>
+
+            </div>
+        </div>
+
+        <div v-for="(vagaTI, index) in vagasTI"  style="margin-bottom:4px;">
+            <div class="p-3 mb-2 bg-dark text-white"> 
+              <div class="row">  
+                
+                    <button type="button" class="btn btn-danger" style="margin-left: 15px;" v-bind:data-object-index="index" onclick="eliminarVagaTI(this);">Eliminar</button>
+                    <button type="button" style="margin-right: 75px;" class="btn btn-success" v-bind:data-object-index="index" onclick="editarVagaTI(this);">Editar</button>
+                
+                <div class="col-sm">
+                    {{vagaTI.id}}
+                </div>
+                <div class="col-sm">
+                    {{vagaTI.cargo}}
+                </div>
+                <div class="col-sm">
+                    {{vagaTI.requisitos}}
+                </div>
+                <div class="col-sm">
+                    {{vagaTI.salario}}
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+        <!-- modal NOVO ALUNO -->
+        <div id="novaVagaTI" class="modal " tabindex="-1" role="dialog">
+            <div class="p-3 mb-2 bg-outline-info text-white">
+
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title bg-white text-dark">Nova Vaga TI</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body bg-white text-dark">
+                            <div class="form-group">
+                                <label for="txtRa">ID</label>
+                                <input type="text" class="form-control" id="txtId" />
+                            </div>
+                            <div class="form-group bg-white text-dark">
+                                <label for="txtNome">Cargo</label>
+                                <input type="text" class="form-control" id="txtCargo" />
+                            </div>
+                            <div class="form-group bg-white text-dark">
+                                <label for="txtEmail">Requisitos</label>
+                                <input type="text" class="form-control" id="txtRequisitos" />
+                            </div>
+                            <div class="form-group bg-white text-dark">
+                                <label for="txtEmail">Salario</label>
+                                <input type="text" class="form-control" id="txtSalario" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-primary" onclick="salvarVagaTI();">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- modal EDITAR ALUNO -->
+        <div id="editarVagaTI" class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Alterar Vaga</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="txtId">ID</label>
+                            <input type="text" class="form-control" id="txtIdE" readonly="readonly" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtCargo">Cargo</label>
+                            <input type="text" class="form-control" id="txtCargoE" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtRequisitos">Requisitos</label>
+                            <input type="text" class="form-control" id="txtRequisitosE" />
+                        </div>
+                        <div class="form-group">
+                            <label for="txtSalario">Salario</label>
+                            <input type="text" class="form-control" id="txtSalarioE" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" onclick="editarVagaTIConfirmar();">Alterar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</body>
+
+</html>
